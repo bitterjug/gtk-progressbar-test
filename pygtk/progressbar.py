@@ -4,7 +4,19 @@
 
 import pygtk
 pygtk.require('2.0')
-import gtk, gobject
+import gtk
+import gobject
+
+
+class MyProgressBar(gtk.ProgressBar):
+
+    def __init__(self, *args, **kwargs):
+        super(MyProgressBar, self).__init__(*args, **kwargs)
+
+    def draw(self, *args, **kwargs):
+        import ipdb; ipdb.set_trace()
+        super(MyProgressBar, self).draw(*args, **kwargs)
+
 
 # Update the value of the progress bar so that we get
 # some movement
@@ -23,6 +35,7 @@ def progress_timeout(pbobj):
     # As this is a timeout function, return TRUE so that it
     # continues to get called
     return True
+
 
 class ProgressBar:
     # Callback that toggles the text display within the progress
@@ -57,6 +70,7 @@ class ProgressBar:
     def __init__(self):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_resizable(True)
+        self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color('#00F'))
 
         self.window.connect("destroy", self.destroy_progress)
         self.window.set_title("ProgressBar")
@@ -73,14 +87,14 @@ class ProgressBar:
         align.show()
 
         # Create the ProgressBar
-        self.pbar = gtk.ProgressBar()
-        self.pbar.modify_bg(gtk.STATE_ACTIVE, gtk.gdk.Color('#F00'))
+        self.pbar = MyProgressBar()
+        #self.pbar.modify_bg(gtk.STATE_ACTIVE, gtk.gdk.Color('#F00'))
 
         align.add(self.pbar)
         self.pbar.show()
 
         # Add a timer callback to update the value of the progress bar
-        self.timer = gobject.timeout_add (100, progress_timeout, self)
+        self.timer = gobject.timeout_add(100, progress_timeout, self)
 
         separator = gtk.HSeparator()
         vbox.pack_start(separator, False, False, 0)
@@ -125,10 +139,11 @@ class ProgressBar:
 
         # This grabs this button to be the default button. Simply hitting
         # the "Enter" key will cause this button to activate.
-        button.grab_default ()
+        button.grab_default()
         button.show()
 
         self.window.show()
+
 
 def main():
     gtk.main()

@@ -8,6 +8,10 @@ class MyProgressBar(gtk.ProgressBar):
     def __init__(self, *args, **kwargs):
         super(MyProgressBar, self).__init__(*args, **kwargs)
 
+    def draw(self, *args, **kwargs):
+
+        super(MyProgressBar, self).draw(*args, **kwargs)
+
 
 class MainWin:
 
